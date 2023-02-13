@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface InitialStateTypes {
-    currentUser: {} | null;
+    currentUser: {
+        _id: string;
+        avatar: string;
+        averageScore: number;
+        bio: string;
+    } | null;
 }
 
 const initialState: InitialStateTypes = {
@@ -15,9 +20,12 @@ const userSlice = createSlice({
         setCurrentUser(state, action) {
             state.currentUser = action.payload;
         },
+        logout(state) {
+            state.currentUser = null;
+        },
     },
 });
 
-export const { setCurrentUser } = userSlice.actions;
+export const { setCurrentUser, logout } = userSlice.actions;
 
 export default userSlice.reducer;

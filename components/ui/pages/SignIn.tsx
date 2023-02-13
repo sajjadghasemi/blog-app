@@ -1,16 +1,62 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import { Cookies } from "react-cookie";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface InputsTypes {
     usernameUp: string;
     nameUp: string;
 }
 
+interface InputsInTypes {
+    usernameIn: string;
+    passwordIn: string;
+}
+
 const SignIn = () => {
     const [showRegister, setShowRegister] = useState<boolean>(false);
+    const [alreadyExists, setAlreadyExists] = useState<boolean>(false);
+    const [users, setUsers] = useState<{}[] | null>(null);
+    const [usernameInput, setUsernameInput] = useState<string>("");
     const cookie = new Cookies();
+    const route = useRouter();
+
+    const fetchUsers = async () => {
+        await axios({
+            method: "get",
+            url: "http://localhost:4000/user",
+        })
+            .then(function (response) {
+                setUsers(response.data);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    };
+
+    const handleUsernameInput = (e: ChangeEvent<HTMLInputElement>) => {
+        setUsernameInput(e.target.value);
+        setAlreadyExists(false);
+    };
+
+    const usernames = users?.map((item: any) => item.username);
+
+    useEffect(() => {
+        let timer = setTimeout(() => {
+            fetchUsers();
+            if (usernames?.includes(usernameInput)) {
+                setAlreadyExists(true);
+            } else {
+                setAlreadyExists(false);
+            }
+        }, 3000);
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [usernameInput]);
 
     const handleForm = () => {
         setShowRegister(!showRegister);
@@ -22,6 +68,12 @@ const SignIn = () => {
         handleSubmit,
     } = useForm<InputsTypes>();
 
+    const {
+        register: register1,
+        formState: { errors: errors1 },
+        handleSubmit: handleSubmit1,
+    } = useForm<InputsInTypes>();
+
     const signUp: SubmitHandler<InputsTypes> = async (data) => {
         await axios
             .post(`http://localhost:4000/user/signup`, {
@@ -30,6 +82,33 @@ const SignIn = () => {
             })
             .then((res) => {
                 cookie.set("token", res.data.token, { path: "/" });
+                if (res) {
+                    route.push("/");
+                    toast("ثبت نام با موفقیت انجام شد.");
+                }
+            })
+            .catch(function (error) {
+                if (
+                    error.response.data.msg ===
+                    "this username already exists in the database"
+                ) {
+                    setAlreadyExists(!alreadyExists);
+                }
+            });
+    };
+
+    const signIn: SubmitHandler<InputsInTypes> = async (data) => {
+        await axios
+            .post(`http://localhost:4000/user/login`, {
+                username: data.usernameIn,
+                password: data.passwordIn,
+            })
+            .then((res) => {
+                cookie.set("token", res.data.token, { path: "/" });
+                if (res) {
+                    route.push("/");
+                    toast(" ورود با موفقیت انجام شد.");
+                }
             })
             .catch(function (error) {
                 console.log(error);
@@ -106,7 +185,7 @@ const SignIn = () => {
                         </div>
                         <div className="divider my-6 text-xs text-content2"></div>
                         <div className="form-group">
-                            <div className="form-field">
+                            <div className="form-field relative">
                                 <input
                                     {...register("usernameUp", {
                                         required: true,
@@ -116,12 +195,22 @@ const SignIn = () => {
                                     placeholder="نام کاربری"
                                     type="text"
                                     className="input max-w-full shabnam"
+                                    onChange={handleUsernameInput}
                                 />
-                                <label className="form-label">
-                                    <span className="form-label-alt shabnam mr-1 text-red-1000">
-                                        یک نام کاربری مناسب وارد کنید.
-                                    </span>
-                                </label>
+                                {errors.usernameUp && (
+                                    <label className="form-label">
+                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                            یک نام کاربری مناسب وارد کنید.
+                                        </span>
+                                    </label>
+                                )}
+                                {alreadyExists && (
+                                    <label className="form-label">
+                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                            این نام کاربری تکراری می‌باشد.
+                                        </span>
+                                    </label>
+                                )}
                             </div>
                             <div className="form-field">
                                 <div className="form-field">
@@ -135,11 +224,13 @@ const SignIn = () => {
                                         type="text"
                                         className="input max-w-full shabnam"
                                     />
-                                    <label className="form-label">
-                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
-                                            یک نام کاربری مناسب وارد کنید.
-                                        </span>
-                                    </label>
+                                    {errors.nameUp && (
+                                        <label className="form-label">
+                                            <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                                یک نام مناسب وارد کنید.
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                             <div className="form-field pt-3">
@@ -167,7 +258,11 @@ const SignIn = () => {
                 </div>
             ) : (
                 <div className="m-4 text-center">
-                    <form className="mx-auto flex w-full max-w-lg flex-col rounded-xl border border-border bg-backgroundSecondary p-2 sm:p-16">
+                    <form
+                        autoComplete="off"
+                        onSubmit={handleSubmit1(signIn)}
+                        className="mx-auto flex w-full max-w-lg flex-col rounded-xl border border-border bg-backgroundSecondary p-2 sm:p-16"
+                    >
                         <div className="flex w-full flex-col gap-2">
                             <div className="flex w-full flex-col gap-2">
                                 <a className="btn gap-2 bg-gray-400">
@@ -231,8 +326,13 @@ const SignIn = () => {
                         <div className="form-group">
                             <div className="form-field">
                                 <input
+                                    {...register1("usernameIn", {
+                                        required: true,
+                                        minLength: 1,
+                                        maxLength: 17,
+                                    })}
                                     placeholder="نام کاربری"
-                                    type="email"
+                                    type="text"
                                     className="input max-w-full shabnam"
                                 />
                                 <label className="form-label">
@@ -244,6 +344,9 @@ const SignIn = () => {
                             <div className="form-field">
                                 <div className="form-field">
                                     <input
+                                        {...register1("passwordIn", {
+                                            required: true,
+                                        })}
                                         placeholder="رمز عبور"
                                         type="password"
                                         className="input max-w-full shabnam"
@@ -258,7 +361,7 @@ const SignIn = () => {
                             <div className="form-field pt-3">
                                 <div className="form-control justify-between">
                                     <button
-                                        type="button"
+                                        type="submit"
                                         className="btn bg-gray-700 w-full shabnam"
                                     >
                                         ورود

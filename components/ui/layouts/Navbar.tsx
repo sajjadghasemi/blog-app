@@ -5,15 +5,24 @@ import { FiPlusSquare, FiLogIn } from "react-icons/fi";
 import { TbEdit } from "react-icons/tb";
 import { GiSpiderWeb } from "react-icons/gi";
 import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { Cookies } from "react-cookie";
+import { logout } from "@/store/userSlice";
 
 const Navbar = () => {
+    const cookie = new Cookies();
+    const dispatch = useDispatch();
+
     const currentUser = useSelector(
         (state: RootState) => state.userSlice.currentUser
     );
-    console.log(currentUser);
 
     const route = useRouter();
+
+    const handleLogout = () => {
+        cookie.remove("token");
+        dispatch(logout());
+    };
 
     return (
         <div className="navbar rounded-t-3xl fixed bottom-0">
@@ -27,7 +36,11 @@ const Navbar = () => {
                                     tabIndex={0}
                                 >
                                     <img
-                                        src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                                        src={
+                                            currentUser.avatar
+                                                ? currentUser.avatar
+                                                : "icon.png"
+                                        }
                                         alt="avatar"
                                     />
                                 </label>
@@ -40,6 +53,7 @@ const Navbar = () => {
                                     </Link>
                                     <Link
                                         href="/"
+                                        onClick={handleLogout}
                                         tabIndex={-1}
                                         className="dropdown-item text-sm shabnam"
                                     >
