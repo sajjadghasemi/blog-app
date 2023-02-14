@@ -8,6 +8,7 @@ import { RootState } from "@/store/store";
 import { useSelector, useDispatch } from "react-redux";
 import { Cookies } from "react-cookie";
 import { logout } from "@/store/userSlice";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
     const cookie = new Cookies();
@@ -22,6 +23,7 @@ const Navbar = () => {
     const handleLogout = () => {
         cookie.remove("token");
         dispatch(logout());
+        toast("خروج با موفقیت انجام شد.");
     };
 
     return (

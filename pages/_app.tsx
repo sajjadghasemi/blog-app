@@ -48,7 +48,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     useEffect(() => {
         me();
-    }, []);
+    }, [cookie]);
 
     return renderWithLayout(
         <Provider store={store}>

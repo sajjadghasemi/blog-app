@@ -19,6 +19,9 @@ interface InputsInTypes {
 const SignIn = () => {
     const [showRegister, setShowRegister] = useState<boolean>(false);
     const [alreadyExists, setAlreadyExists] = useState<boolean>(false);
+    const [usernameActive, setUsernameActive] = useState<boolean>(false);
+    const [noUser, setNoUser] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const [users, setUsers] = useState<{}[] | null>(null);
     const [usernameInput, setUsernameInput] = useState<string>("");
     const cookie = new Cookies();
@@ -40,17 +43,26 @@ const SignIn = () => {
     const handleUsernameInput = (e: ChangeEvent<HTMLInputElement>) => {
         setUsernameInput(e.target.value);
         setAlreadyExists(false);
+        setUsernameActive(false);
     };
 
     const usernames = users?.map((item: any) => item.username);
 
     useEffect(() => {
+        setLoading(true);
         let timer = setTimeout(() => {
             fetchUsers();
             if (usernames?.includes(usernameInput)) {
                 setAlreadyExists(true);
+                setLoading(false);
+                setUsernameActive(false);
+            } else if (usernameInput === "") {
+                setUsernameActive(false);
+                setLoading(false);
             } else {
                 setAlreadyExists(false);
+                setLoading(false);
+                setUsernameActive(true);
             }
         }, 3000);
         return () => {
@@ -111,7 +123,12 @@ const SignIn = () => {
                 }
             })
             .catch(function (error) {
-                console.log(error);
+                if (
+                    error.response.data.msg ===
+                    "bad request: no such user exists"
+                ) {
+                    setNoUser(true);
+                }
             });
     };
 
@@ -197,6 +214,9 @@ const SignIn = () => {
                                     className="input max-w-full shabnam"
                                     onChange={handleUsernameInput}
                                 />
+                                {loading && (
+                                    <span className="absolute btn btn-outline border-0 left-0 btn-loading"></span>
+                                )}
                                 {errors.usernameUp && (
                                     <label className="form-label">
                                         <span className="form-label-alt shabnam mr-1 text-red-1000">
@@ -208,6 +228,13 @@ const SignIn = () => {
                                     <label className="form-label">
                                         <span className="form-label-alt shabnam mr-1 text-red-1000">
                                             این نام کاربری تکراری می‌باشد.
+                                        </span>
+                                    </label>
+                                )}
+                                {usernameActive && (
+                                    <label className="form-label">
+                                        <span className="form-label-alt shabnam mr-1 text-green-1000">
+                                            این نام کاربری فعال می‌باشد.
                                         </span>
                                     </label>
                                 )}
@@ -334,12 +361,22 @@ const SignIn = () => {
                                     placeholder="نام کاربری"
                                     type="text"
                                     className="input max-w-full shabnam"
+                                    onChange={() => setNoUser(false)}
                                 />
-                                <label className="form-label">
-                                    <span className="form-label-alt shabnam mr-1 text-red-1000">
-                                        یک نام کاربری مناسب وارد کنید.
-                                    </span>
-                                </label>
+                                {errors1.usernameIn && (
+                                    <label className="form-label">
+                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                            نام کاربری خالی نمیشه!
+                                        </span>
+                                    </label>
+                                )}
+                                {noUser && (
+                                    <label className="form-label">
+                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                            نام کاربری یا رمزعبور اشتباه است.
+                                        </span>
+                                    </label>
+                                )}
                             </div>
                             <div className="form-field">
                                 <div className="form-field">
@@ -351,11 +388,13 @@ const SignIn = () => {
                                         type="password"
                                         className="input max-w-full shabnam"
                                     />
-                                    <label className="form-label">
-                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
-                                            یک نام کاربری مناسب وارد کنید.
-                                        </span>
-                                    </label>
+                                    {errors1.passwordIn && (
+                                        <label className="form-label">
+                                            <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                                رمز عبور خالی نمیشه!
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                             <div className="form-field pt-3">
