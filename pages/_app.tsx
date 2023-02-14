@@ -1,9 +1,9 @@
 import Layout from "@/components/ui/layouts/Layout";
-import { wrapper, store } from "@/store/store";
+import { wrapper, store, RootState } from "@/store/store";
 import "@/styles/globals.css";
 import axios from "axios";
 import type { AppProps } from "next/app";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
@@ -28,6 +28,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             return <Layout>{page}</Layout>;
         };
     const dispatch = useDispatch();
+    const userEdited = useSelector(
+        (state: RootState) => state.userSlice.userEdited
+    );
+
     const cookie: string = new Cookies().get("token");
 
     const me = async () => {
@@ -48,7 +52,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     useEffect(() => {
         me();
-    }, [cookie]);
+    }, [cookie, userEdited]);
 
     return renderWithLayout(
         <Provider store={store}>

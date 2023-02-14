@@ -16,13 +16,23 @@ interface InputsInTypes {
     passwordIn: string;
 }
 
+interface UsersType {
+    _id: string;
+    avatar: string;
+    averageScore: number;
+    bio: string;
+    createdAt: string;
+    name: string;
+    updatedAt: string;
+    username: string;
+}
 const SignIn = () => {
     const [showRegister, setShowRegister] = useState<boolean>(false);
     const [alreadyExists, setAlreadyExists] = useState<boolean>(false);
     const [usernameActive, setUsernameActive] = useState<boolean>(false);
     const [noUser, setNoUser] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [users, setUsers] = useState<{}[] | null>(null);
+    const [users, setUsers] = useState<UsersType[] | null>(null);
     const [usernameInput, setUsernameInput] = useState<string>("");
     const cookie = new Cookies();
     const route = useRouter();
@@ -46,12 +56,15 @@ const SignIn = () => {
         setUsernameActive(false);
     };
 
-    const usernames = users?.map((item: any) => item.username);
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const usernames = users?.map((item: UsersType) => item.username);
 
     useEffect(() => {
         setLoading(true);
         let timer = setTimeout(() => {
-            fetchUsers();
             if (usernames?.includes(usernameInput)) {
                 setAlreadyExists(true);
                 setLoading(false);

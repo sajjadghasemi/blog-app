@@ -41,14 +41,14 @@ const Navbar = () => {
                                         src={
                                             currentUser.avatar
                                                 ? currentUser.avatar
-                                                : "icon.png"
+                                                : "/icon.png"
                                         }
                                         alt="avatar"
                                     />
                                 </label>
                                 <div className="text-center dropdown-menu border border-gray-500 dropdown-menu-top-left">
                                     <Link
-                                        href="/"
+                                        href={currentUser._id}
                                         className="dropdown-item text-sm shabnam"
                                     >
                                         پروفایل
