@@ -31,6 +31,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     const userEdited = useSelector(
         (state: RootState) => state.userSlice.userEdited
     );
+    const updateAvatar = useSelector(
+        (state: RootState) => state.userSlice.updateAvatar
+    );
 
     const cookie: string = new Cookies().get("token");
 
@@ -52,7 +55,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     useEffect(() => {
         me();
-    }, [cookie, userEdited]);
+    }, [cookie, userEdited, updateAvatar]);
 
     return renderWithLayout(
         <Provider store={store}>

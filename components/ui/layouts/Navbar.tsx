@@ -39,8 +39,9 @@ const Navbar = () => {
                                 >
                                     <img
                                         src={
-                                            currentUser.avatar
-                                                ? currentUser.avatar
+                                            currentUser?.avatar
+                                                ? "http://localhost:4000/" +
+                                                  currentUser.avatar
                                                 : "/icon.png"
                                         }
                                         alt="avatar"

@@ -10,11 +10,13 @@ interface InitialStateTypes {
         bio: string;
     } | null;
     userEdited: { name: string; bio: string };
+    updateAvatar: string;
 }
 
 const initialState: InitialStateTypes = {
     currentUser: null,
     userEdited: { name: "", bio: "" },
+    updateAvatar: "",
 };
 
 const userSlice = createSlice({
@@ -30,9 +32,13 @@ const userSlice = createSlice({
         editUser(state, action) {
             state.userEdited = action.payload;
         },
+        updateAvatar(state, action) {
+            state.updateAvatar = action.payload;
+        },
     },
 });
 
-export const { setCurrentUser, logout, editUser } = userSlice.actions;
+export const { setCurrentUser, logout, editUser, updateAvatar } =
+    userSlice.actions;
 
 export default userSlice.reducer;

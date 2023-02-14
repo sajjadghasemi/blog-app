@@ -17,7 +17,8 @@ const UserId = () => {
                             className="w-12 h-12 md:w-32 md:h-32 rounded-full object-cover border-2 border-purple-1000"
                             src={
                                 currentUser?.avatar
-                                    ? currentUser.avatar
+                                    ? "http://localhost:4000/" +
+                                      currentUser.avatar
                                     : "/icon.png"
                             }
                         />

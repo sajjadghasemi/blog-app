@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { Cookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { editUser } from "@/store/userSlice";
+import { editUser, updateAvatar } from "@/store/userSlice";
 
 interface InputsInTypes {
     name: string;
     bio: string;
+}
+
+interface AvatarInputTypes {
+    file: any;
 }
 
 const Edit = () => {
@@ -28,6 +32,12 @@ const Edit = () => {
         formState: { errors },
         handleSubmit,
     } = useForm<InputsInTypes>();
+
+    const {
+        register: register2,
+        formState: { errors: errors2 },
+        handleSubmit: handleSubmit2,
+    } = useForm<AvatarInputTypes>();
 
     const edit: SubmitHandler<InputsInTypes> = async (data) => {
         await axios({
@@ -53,47 +63,64 @@ const Edit = () => {
         route.back();
     };
 
-    // const submitAvatar = async (data) => {
-    //     try {
-    //         if (!data.file[0]) return;
+    const submitAvatar: SubmitHandler<AvatarInputTypes> = async (data) => {
+        try {
+            if (!data.file[0]) return;
 
-    //         const formData = new FormData();
-    //         formData.append("avatar", data.file[0]);
+            const formData = new FormData();
+            formData.append("avatar", data.file[0]);
 
-    //         await fetch("http://localhost:4000/user/update-avatar", {
-    //             method: "POST",
-    //             headers: {
-    //                 auth: `ut ${cookie}`,
-    //             },
-    //             body: formData,
-    //         }).then((res) => {
-    //             console.log(res);
-    //         });
-    //     } catch (error) {
-    //         console.log("lol");
-    //     }
-    // };
+            await fetch("http://localhost:4000/user/update-avatar", {
+                method: "POST",
+                headers: {
+                    auth: `ut ${cookie}`,
+                },
+                body: formData,
+            }).then((res) => {
+                if (res.ok === true) {
+                    toast("عکس با موفقیت بارگذاری شد.");
+                }
+            });
+        } catch (error) {
+            console.log("lol");
+        }
+        dispatch(updateAvatar(data.file[0].name));
+        route.back();
+    };
 
     return (
         <div className="container mx-auto px-4">
             <div className="m-4 text-center">
                 <div className="mx-auto flex w-full max-w-lg flex-col rounded-xl border border-border bg-backgroundSecondary p-2 sm:p-8">
-                    <div className="flex w-full items-center flex-col gap-3">
-                        <img
-                            className="w-32 h-32 rounded-full object-cover border-2 border-purple-1000"
-                            src={
-                                currentUser?.avatar
-                                    ? currentUser.avatar
-                                    : "/icon.png"
-                            }
-                        />
-                        <button
-                            type="submit"
-                            className="btn bg-gray-700 w-full shabnam"
-                        >
-                            ثبت عکس
-                        </button>
-                    </div>
+                    <form onSubmit={handleSubmit2(submitAvatar)}>
+                        <div className="flex w-full flex-col gap-3">
+                            <div className="flex w-full items-center flex-col">
+                                <label htmlFor="avatar-input">
+                                    <img
+                                        className="cursor-pointer w-32 h-32 rounded-full object-cover border-2 border-purple-1000"
+                                        src={
+                                            currentUser?.avatar
+                                                ? "http://localhost:4000/" +
+                                                  currentUser.avatar
+                                                : "/icon.png"
+                                        }
+                                    />
+                                </label>
+                                <input
+                                    {...register2("file")}
+                                    type="file"
+                                    id="avatar-input"
+                                    className="hidden cursor-pointer w-48 px-2 py-1.5 text-[.7rem] text-gray-700 outline-none"
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="btn bg-gray-700 w-full shabnam"
+                            >
+                                ثبت عکس
+                            </button>
+                        </div>
+                    </form>
                     <div className="divider my-6 text-xs text-content2"></div>
                     <div className="form-group">
                         <form
@@ -144,7 +171,7 @@ const Edit = () => {
                                         type="submit"
                                         className="btn bg-gray-700 w-full shabnam"
                                     >
-                                        ورود
+                                        ویرایش
                                     </button>
                                 </div>
                             </div>
