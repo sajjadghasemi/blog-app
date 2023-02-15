@@ -30,7 +30,8 @@ const userSlice = createSlice({
             state.currentUser = null;
         },
         editUser(state, action) {
-            state.userEdited = action.payload;
+            state.userEdited.name = action.payload.name;
+            state.userEdited.bio = action.payload.bio;
         },
         updateAvatar(state, action) {
             state.updateAvatar = action.payload;

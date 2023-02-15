@@ -27,7 +27,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar rounded-t-3xl fixed bottom-0">
+        <div className="navbar rounded-t-3xl fixed bottom-0 bg-[#141414]">
             <div className="navbar-start">
                 {currentUser ? (
                     <div className="avatar avatar-ring avatar-md">
@@ -73,7 +73,7 @@ const Navbar = () => {
                     >
                         <Link href="/sign">
                             <p className="shabnam border-4 border-gray-800 rounded-md p-2">
-                                <FiLogIn className="text-3xl" />
+                                <FiLogIn className="text-3xl text-[#c9c9c9] hover:scale-110" />
                             </p>
                         </Link>
                     </span>
@@ -88,9 +88,14 @@ const Navbar = () => {
                 >
                     <HiOutlineHome className="text-3xl" />
                 </Link>
-                <Link href="/" className="navbar-item shabnam text-gray-900">
-                    <FiPlusSquare className="text-3xl" />
-                </Link>
+                {currentUser ? (
+                    <Link
+                        href="/add-blog"
+                        className="navbar-item shabnam text-gray-900"
+                    >
+                        <FiPlusSquare className="text-3xl" />
+                    </Link>
+                ) : null}
                 <Link
                     href="/news"
                     className="navbar-item text-gray-900 shabnam"
@@ -100,7 +105,7 @@ const Navbar = () => {
             </div>
             <div className="navbar-end">
                 <Link href="/" className="navbar-item text-3xl shabnam">
-                    <GiSpiderWeb className="text-4xl" />
+                    <GiSpiderWeb className="text-4xl text-[#c9c9c9] hover:scale-125" />
                 </Link>
             </div>
         </div>

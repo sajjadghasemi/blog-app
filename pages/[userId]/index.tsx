@@ -36,102 +36,104 @@ const UserId = () => {
                                     : "بیوگرافی را وارد کنید"}
                             </p>
                         </div>
-                        <Link
-                            href={
-                                currentUser?._id
-                                    ? currentUser._id + "/edit"
-                                    : "/"
-                            }
-                            className="flex justify-center items-center text-3xl shabnam"
-                        >
-                            ...
-                        </Link>
+                        {currentUser ? (
+                            <Link
+                                href={
+                                    currentUser?._id
+                                        ? currentUser._id + "/edit"
+                                        : "/"
+                                }
+                                className="flex justify-center items-center text-3xl shabnam"
+                            >
+                                ...
+                            </Link>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
             </div>
-            <div className="max-w-[1000px] mx-auto px-20 m-4">
-                <div className="m-4 grid grid-cols-1 md:grid-cols-3">
-                    <Link className="flex flex-col items-center" href="">
-                        <div className="h-[270px] w-[270px] relative">
-                            <img
-                                className="p-1 h-full w-full object-cover cursor-pointer"
-                                src="defaultImage.png"
+            <div className="m-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1">
+                <Link className="flex flex-col items-center" href="">
+                    <div className="relative">
+                        <img
+                            className="h-full w-full object-cover cursor-pointer"
+                            src="defaultImage.png"
+                        />
+                        <div
+                            style={{ direction: "ltr" }}
+                            className="absolute text-center w-full py-1 bottom-0 border bg-black opacity-70"
+                        >
+                            <StarRatings
+                                starRatedColor="orange"
+                                numberOfStars={5}
+                                rating={4.5}
+                                starDimension="16px"
+                                starSpacing="2px"
                             />
-                            <div
-                                style={{ direction: "ltr" }}
-                                className="absolute text-center p-1 bottom-1 left-1 bg-black w-[16.4rem] opacity-70"
-                            >
-                                <StarRatings
-                                    starRatedColor="orange"
-                                    numberOfStars={5}
-                                    rating={4.5}
-                                    starDimension="23px"
-                                    starSpacing="2px"
-                                />
-                            </div>
                         </div>
-                    </Link>
-                    <Link className="flex flex-col items-center" href="">
-                        <div className="h-[270px] w-[270px] relative">
-                            <img
-                                className="p-1 h-full w-full object-cover cursor-pointer"
-                                src="defaultImage.png"
+                    </div>
+                </Link>
+                <Link className="flex flex-col items-center" href="">
+                    <div className="relative">
+                        <img
+                            className="h-full w-full object-cover cursor-pointer"
+                            src="defaultImage.png"
+                        />
+                        <div
+                            style={{ direction: "ltr" }}
+                            className="absolute text-center w-full py-1 bottom-0 border bg-black opacity-70"
+                        >
+                            <StarRatings
+                                starRatedColor="orange"
+                                numberOfStars={5}
+                                rating={4.5}
+                                starDimension="16px"
+                                starSpacing="2px"
                             />
-                            <div
-                                style={{ direction: "ltr" }}
-                                className="absolute text-center p-1 bottom-1 left-1 bg-black w-[16.4rem] opacity-70"
-                            >
-                                <StarRatings
-                                    starRatedColor="orange"
-                                    numberOfStars={5}
-                                    rating={4.5}
-                                    starDimension="23px"
-                                    starSpacing="2px"
-                                />
-                            </div>
                         </div>
-                    </Link>
-                    <Link className="flex flex-col items-center" href="">
-                        <div className="h-[270px] w-[270px] relative">
-                            <img
-                                className="p-1 h-full w-full object-cover cursor-pointer"
-                                src="defaultImage.png"
+                    </div>
+                </Link>
+                <Link className="flex flex-col items-center" href="">
+                    <div className="relative">
+                        <img
+                            className="h-full w-full object-cover cursor-pointer"
+                            src="defaultImage.png"
+                        />
+                        <div
+                            style={{ direction: "ltr" }}
+                            className="absolute text-center w-full py-1 bottom-0 border bg-black opacity-70"
+                        >
+                            <StarRatings
+                                starRatedColor="orange"
+                                numberOfStars={5}
+                                rating={4.5}
+                                starDimension="16px"
+                                starSpacing="2px"
                             />
-                            <div
-                                style={{ direction: "ltr" }}
-                                className="absolute text-center p-1 bottom-1 left-1 bg-black w-[16.4rem] opacity-70"
-                            >
-                                <StarRatings
-                                    starRatedColor="orange"
-                                    numberOfStars={5}
-                                    rating={4.5}
-                                    starDimension="23px"
-                                    starSpacing="2px"
-                                />
-                            </div>
                         </div>
-                    </Link>
-                    <Link className="flex flex-col items-center" href="">
-                        <div className="h-[270px] w-[270px] relative">
-                            <img
-                                className="p-1 h-full w-full object-cover cursor-pointer"
-                                src="defaultImage.png"
+                    </div>
+                </Link>
+                <Link className="flex flex-col items-center" href="">
+                    <div className="relative">
+                        <img
+                            className="h-full w-full object-cover cursor-pointer"
+                            src="defaultImage.png"
+                        />
+                        <div
+                            style={{ direction: "ltr" }}
+                            className="absolute text-center w-full py-1 bottom-0 border bg-black opacity-70"
+                        >
+                            <StarRatings
+                                starRatedColor="orange"
+                                numberOfStars={5}
+                                rating={4.5}
+                                starDimension="16px"
+                                starSpacing="2px"
                             />
-                            <div
-                                style={{ direction: "ltr" }}
-                                className="absolute text-center p-1 bottom-1 left-1 bg-black w-[16.4rem] opacity-70"
-                            >
-                                <StarRatings
-                                    starRatedColor="orange"
-                                    numberOfStars={5}
-                                    rating={4.5}
-                                    starDimension="23px"
-                                    starSpacing="2px"
-                                />
-                            </div>
                         </div>
-                    </Link>
-                </div>
+                    </div>
+                </Link>
             </div>
         </div>
     );
