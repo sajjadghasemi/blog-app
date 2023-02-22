@@ -1,7 +1,9 @@
 import HomeLoading from "@/components/ui/layouts/HomeLoading";
 import EditBlog from "@/components/ui/pages/EditBlog";
+import { RootState } from "@/store/store";
 import axios from "axios";
 import { FC } from "react";
+import { useSelector } from "react-redux";
 
 interface IdsTypes {
     _id: string;
@@ -59,9 +61,21 @@ interface BlogTypes {
 }
 
 const Edit: FC<BlogTypes> = (props) => {
+    const currentUser = useSelector(
+        (state: RootState) => state.userSlice.currentUser
+    );
+
     if (!props.blog) return <HomeLoading />;
 
-    return <EditBlog blog={props.blog} />;
+    return (
+        <>
+            {currentUser ? (
+                <EditBlog blog={props.blog} />
+            ) : (
+                <h1 className="text-4xl text-center mt-10">Nothing</h1>
+            )}
+        </>
+    );
 };
 
 export const getStaticPaths = async () => {

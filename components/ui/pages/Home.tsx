@@ -49,7 +49,7 @@ const Home: FC<BlogsTypes> = (props) => {
                             />
                             <div
                                 style={{ direction: "ltr" }}
-                                className="absolute text-center w-full py-1 bottom-[0] translate-y-9 bg-black opacity-70 group-hover:translate-y-0 duration-700"
+                                className="absolute text-center w-full py-1 bottom-[0] translate-y-9 bg-black opacity-70 group-hover:translate-y-0 duration-300"
                             >
                                 <StarRatings
                                     starRatedColor="orange"
