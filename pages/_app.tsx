@@ -6,12 +6,17 @@ import type { AppProps } from "next/app";
 import { Provider, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/store/userSlice";
 import { Cookies } from "react-cookie";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
+import {
+    Hydrate,
+    QueryClient,
+    QueryClientProvider,
+} from "@tanstack/react-query";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -34,6 +39,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     const updateAvatar = useSelector(
         (state: RootState) => state.userSlice.updateAvatar
     );
+
+    const [queryClient] = React.useState(() => new QueryClient());
 
     const cookie: string = new Cookies().get("token");
 
@@ -58,21 +65,25 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     }, [cookie, userEdited, updateAvatar]);
 
     return renderWithLayout(
-        <Provider store={store}>
-            <ToastContainer
-                position="top-center"
-                autoClose={4000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={true}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
-            <Component {...pageProps} />
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+                <Provider store={store}>
+                    <ToastContainer
+                        position="top-center"
+                        autoClose={4000}
+                        hideProgressBar={false}
+                        newestOnTop={false}
+                        closeOnClick
+                        rtl={true}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="dark"
+                    />
+                    <Component {...pageProps} />
+                </Provider>
+            </Hydrate>
+        </QueryClientProvider>
     );
 }
 

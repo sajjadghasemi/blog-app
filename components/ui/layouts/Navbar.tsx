@@ -49,7 +49,7 @@ const Navbar = () => {
                                 </label>
                                 <div className="text-center dropdown-menu border border-gray-500 dropdown-menu-top-left">
                                     <Link
-                                        href={currentUser._id}
+                                        href="profile"
                                         className="dropdown-item text-sm shabnam"
                                     >
                                         پروفایل
@@ -97,7 +97,7 @@ const Navbar = () => {
                     </Link>
                 ) : null}
                 <Link
-                    href="/news"
+                    href="/people"
                     className="navbar-item text-gray-900 shabnam"
                 >
                     <TbEdit className="text-3xl" />

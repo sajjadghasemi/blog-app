@@ -1,7 +1,8 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import Home from "@/components/ui/pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
+import HomeLoading from "@/components/ui/layouts/HomeLoading";
 
 interface BlogsTypes {
     blogs: {
@@ -29,6 +30,8 @@ interface BlogsTypes {
 }
 
 const HomePage: FC<BlogsTypes> = (props) => {
+    if (!props.blogs) return <HomeLoading />;
+
     return <Home blogs={props.blogs} />;
 };
 
@@ -44,11 +47,9 @@ export const getStaticProps = async () => {
             toast.error("مشکلی رخ داده است.");
         });
 
-    console.log(BLOGS);
-
     return {
         props: {
-            blogs: BLOGS,
+            blogs: BLOGS || null,
         },
         revalidate: 1,
     };

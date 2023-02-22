@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Cookies } from "react-cookie";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { FC } from "react";
 
 interface InputsTypes {
     title: string;
@@ -9,7 +10,32 @@ interface InputsTypes {
     content: string;
 }
 
-const AddBlog = () => {
+interface BlogTypes {
+    blog: {
+        _id: string;
+        title: string;
+        content: string;
+        creatorId: string;
+        imgurl: string;
+        averageScore: number;
+        createdAt: string;
+        updatedAt: string;
+        creator: {
+            _id: string;
+            username: string;
+            name: string;
+            bio: string;
+            blogs: string[];
+            avatar: string;
+            averageScore: number;
+            createdAt: string;
+            updatedAt: string;
+        };
+        rateCount: number;
+    };
+}
+
+const EditBlog: FC<BlogTypes> = (props) => {
     const route = useRouter();
 
     const {
@@ -21,20 +47,23 @@ const AddBlog = () => {
     const cookie = new Cookies().get("token");
 
     const newPost: SubmitHandler<InputsTypes> = async (data) => {
-        await fetch("http://localhost:4000/blog/write", {
+        await fetch("http://localhost:4000/blog/edit", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 auth: `ut ${cookie}`,
             },
             body: JSON.stringify({
-                title: data.title,
-                content: data.content,
-                imgurl: data.imageUrl,
+                blogId: route.query.blogId,
+                data: {
+                    title: data.title,
+                    content: data.content,
+                    imgurl: data.imageUrl,
+                },
             }),
         }).then((response) => response.json());
-        toast("مطلب شما با موفقیت پست شد.");
-        route.push("/");
+        toast("مطلب شما با موفقیت ویرایش شد.");
+        route.back();
     };
 
     return (
@@ -43,7 +72,7 @@ const AddBlog = () => {
                 <div className="mx-auto flex w-full max-w-lg flex-col gap-6 rounded-xl border border-border bg-backgroundSecondary p-2 sm:p-8">
                     <div>
                         <h2 className="shabnam text-2xl">
-                            مطلب جدید اضافه کنید.
+                            مطلب را ویرایش کنید.
                         </h2>
                     </div>
                     <div className="form-group">
@@ -60,6 +89,7 @@ const AddBlog = () => {
                                     placeholder="عنوان"
                                     type="text"
                                     className="input max-w-full shabnam"
+                                    defaultValue={props.blog.title}
                                 />
                                 {errors.title && (
                                     <label className="form-label">
@@ -77,6 +107,7 @@ const AddBlog = () => {
                                     placeholder="آدرس عکس"
                                     type="text"
                                     className="input max-w-full shabnam"
+                                    defaultValue={props.blog.imgurl}
                                 />
                                 {errors.imageUrl && (
                                     <label className="form-label">
@@ -93,6 +124,7 @@ const AddBlog = () => {
                                     })}
                                     placeholder="توضیحات"
                                     className="input max-w-full shabnam p-3 h-52"
+                                    defaultValue={props.blog.content}
                                 ></textarea>
                                 {errors.content && (
                                     <label className="form-label">
@@ -108,7 +140,7 @@ const AddBlog = () => {
                                         type="submit"
                                         className="btn bg-gray-700 w-full shabnam"
                                     >
-                                        اضافه کردن
+                                        ویرایش
                                     </button>
                                 </div>
                             </div>
@@ -120,4 +152,4 @@ const AddBlog = () => {
     );
 };
 
-export default AddBlog;
+export default EditBlog;

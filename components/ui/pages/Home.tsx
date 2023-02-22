@@ -23,7 +23,7 @@ interface BlogsTypes {
             createdAt: string;
             updatedAt: string;
         };
-        rateCount: 0;
+        rateCount: number;
     }[];
 }
 
@@ -33,7 +33,7 @@ const Home: FC<BlogsTypes> = (props) => {
             <div className="m-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1">
                 {props.blogs.map((item) => (
                     <Link
-                        className="flex flex-col items-center"
+                        className="flex flex-col items-center overflow-hidden group"
                         href={item._id}
                         key={item._id}
                     >
@@ -49,12 +49,12 @@ const Home: FC<BlogsTypes> = (props) => {
                             />
                             <div
                                 style={{ direction: "ltr" }}
-                                className="absolute text-center w-full py-1 bottom-0 bg-black opacity-70"
+                                className="absolute text-center w-full py-1 bottom-[0] translate-y-9 bg-black opacity-70 group-hover:translate-y-0 duration-700"
                             >
                                 <StarRatings
                                     starRatedColor="orange"
                                     numberOfStars={5}
-                                    rating={4.5}
+                                    rating={item.averageScore}
                                     starDimension="16px"
                                     starSpacing="2px"
                                 />
