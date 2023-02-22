@@ -101,9 +101,11 @@ const SingleBlog: FC<BlogTypes> = (props) => {
                 blogId: route.query.blogId,
                 text: data.comment,
             }),
-        }).then((response) => response.json());
+        })
+            .then((response) => response.json())
+            .then(() => refetch());
+
         toast.success("نظر شما با موفقیت ثبت شد.");
-        refetch();
         reset();
     };
 

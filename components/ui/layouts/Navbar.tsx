@@ -49,7 +49,7 @@ const Navbar = () => {
                                 </label>
                                 <div className="text-center dropdown-menu border border-gray-500 dropdown-menu-top-left">
                                     <Link
-                                        href="profile"
+                                        href="/profile"
                                         className="dropdown-item text-sm shabnam"
                                     >
                                         پروفایل
