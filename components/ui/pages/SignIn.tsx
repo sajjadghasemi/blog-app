@@ -91,7 +91,7 @@ const SignIn = () => {
         register,
         formState: { errors },
         handleSubmit,
-    } = useForm<InputsTypes>();
+    } = useForm<InputsTypes>({ mode: "onChange" });
 
     const {
         register: register1,
@@ -221,6 +221,10 @@ const SignIn = () => {
                                         required: true,
                                         minLength: 1,
                                         maxLength: 17,
+                                        pattern: {
+                                            value: /^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+                                            message: "",
+                                        },
                                     })}
                                     placeholder="نام کاربری"
                                     type="text"
@@ -230,13 +234,15 @@ const SignIn = () => {
                                 {loading && (
                                     <span className="absolute btn btn-outline border-0 left-0 btn-loading"></span>
                                 )}
-                                {errors.usernameUp && (
-                                    <label className="form-label">
-                                        <span className="form-label-alt shabnam mr-1 text-red-1000">
-                                            یک نام کاربری مناسب وارد کنید.
-                                        </span>
-                                    </label>
-                                )}
+
+                                {errors.usernameUp &&
+                                    errors.usernameUp?.type === "pattern" && (
+                                        <label className="form-label">
+                                            <span className="form-label-alt shabnam mr-1 text-red-1000">
+                                                فقط انگلیسی، اونم حروف کوچیکش!
+                                            </span>
+                                        </label>
+                                    )}
                                 {alreadyExists && (
                                     <label className="form-label">
                                         <span className="form-label-alt shabnam mr-1 text-red-1000">
