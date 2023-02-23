@@ -1,4 +1,4 @@
-import { FC, Suspense } from "react";
+import { FC, Suspense, useState } from "react";
 import Home from "@/components/ui/pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";

@@ -17,6 +17,7 @@ import {
     QueryClient,
     QueryClientProvider,
 } from "@tanstack/react-query";
+import NextNProgress from "nextjs-progressbar";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -68,6 +69,14 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
                 <Provider store={store}>
+                    <NextNProgress
+                        options={{ showSpinner: false }}
+                        color="#00abdf"
+                        startPosition={0.2}
+                        stopDelayMs={200}
+                        height={4}
+                        showOnShallow={false}
+                    />
                     <ToastContainer
                         position="top-center"
                         autoClose={4000}
