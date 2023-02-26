@@ -48,7 +48,8 @@ interface ContextTypes {
 }
 
 const UserId: FC<BlogsTypes> = (props) => {
-    if (!props.userBlogs || !props.singleUser) return <HomeLoading />;
+    if (!props.userBlogs && !props.singleUser) return <HomeLoading />;
+
     return (
         <>
             <div className="grid grid-cols-1 my-2">
