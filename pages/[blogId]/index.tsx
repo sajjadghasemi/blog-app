@@ -5,6 +5,7 @@ import React from "react";
 import HomeLoading from "@/components/ui/layouts/HomeLoading";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { blogComments } from "@/hooks/fetches";
+import Head from "next/head";
 
 interface BlogTypes {
     blog: {
@@ -64,7 +65,15 @@ interface ContextTypes {
 const Single: FC<BlogTypes> = (props) => {
     if (!props.blog) return <HomeLoading />;
 
-    return <SingleBlog blog={props.blog} />;
+    return (
+        <>
+            <Head>
+                <title>Blog App | {props.blog.title}</title>
+                <meta name="description" content={props.blog.content} />
+            </Head>
+            <SingleBlog blog={props.blog} />
+        </>
+    );
 };
 
 export const getStaticPaths = async () => {

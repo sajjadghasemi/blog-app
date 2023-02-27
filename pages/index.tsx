@@ -3,6 +3,7 @@ import Home from "@/components/ui/pages/Home";
 import axios from "axios";
 import { toast } from "react-toastify";
 import HomeLoading from "@/components/ui/layouts/HomeLoading";
+import Head from "next/head";
 
 interface BlogsTypes {
     blogs: {
@@ -32,7 +33,16 @@ interface BlogsTypes {
 const HomePage: FC<BlogsTypes> = (props) => {
     if (!props.blogs) return <HomeLoading />;
 
-    return <Home blogs={props.blogs} />;
+    return (
+        <>
+            <Head>
+                <title>Blog App</title>
+                <link rel="shortcut icon" href="/favicon.png" />
+                <meta name="description" content="Blog web application" />
+            </Head>
+            <Home blogs={props.blogs} />
+        </>
+    );
 };
 
 export const getStaticProps = async () => {
