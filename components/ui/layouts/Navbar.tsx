@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { HiOutlineHome } from "react-icons/hi";
 import { FiPlusSquare, FiLogIn } from "react-icons/fi";
+import { CgDarkMode } from "react-icons/cg";
 import { TbEdit } from "react-icons/tb";
 import { GiSpiderWeb } from "react-icons/gi";
 import { RootState } from "@/store/store";
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Cookies } from "react-cookie";
 import { logout } from "@/store/userSlice";
 import { toast } from "react-toastify";
+import { toggleTheme } from "@/store/themeSlice";
 
 const Navbar = () => {
     const cookie = new Cookies();
@@ -18,7 +19,13 @@ const Navbar = () => {
         (state: RootState) => state.userSlice.currentUser
     );
 
-    const route = useRouter();
+    const theme = useSelector(
+        (state: RootState) => state.themeSlice.darkToggle
+    );
+
+    const toggleDark = () => {
+        dispatch(toggleTheme(!theme));
+    };
 
     const handleLogout = () => {
         cookie.remove("token");
@@ -27,7 +34,7 @@ const Navbar = () => {
     };
 
     return (
-        <div className="navbar rounded-t-3xl fixed bottom-0 bg-[#141414]">
+        <div className="navbar rounded-t-3xl fixed bottom-0 bg-gray-1000 dark:bg-[#141414]">
             <div className="navbar-start">
                 {currentUser ? (
                     <div className="avatar avatar-ring avatar-md">
@@ -73,39 +80,46 @@ const Navbar = () => {
                     >
                         <Link href="/sign">
                             <p className="shabnam border-4 border-gray-800 rounded-md p-2">
-                                <FiLogIn className="text-3xl text-[#c9c9c9] hover:scale-110" />
+                                <FiLogIn className="text-3xl text-black dark:text-[#c9c9c9] hover:scale-110" />
                             </p>
                         </Link>
                     </span>
                 )}
+                <span
+                    className="tooltip tooltip-left mr-4"
+                    data-tooltip="Change Theme"
+                >
+                    <CgDarkMode
+                        onClick={toggleDark}
+                        className="text-3xl cursor-pointer text-black dark:text-gray-1100"
+                    />
+                </span>
             </div>
             <div className="navbar-center">
                 <Link
                     href="/"
-                    className={`navbar-item shabnam text-gray-900 ${
-                        route.pathname == "/" ? "text-white" : ""
-                    }`}
+                    className="navbar-item text-black dark:text-gray-900"
                 >
                     <HiOutlineHome className="text-3xl" />
                 </Link>
                 {currentUser ? (
                     <Link
                         href="/add-blog"
-                        className="navbar-item shabnam text-gray-900"
+                        className="navbar-item shabnam text-black dark:text-gray-900"
                     >
                         <FiPlusSquare className="text-3xl" />
                     </Link>
                 ) : null}
                 <Link
                     href="/people"
-                    className="navbar-item text-gray-900 shabnam"
+                    className="navbar-item text-black dark:text-gray-900"
                 >
                     <TbEdit className="text-3xl" />
                 </Link>
             </div>
             <div className="navbar-end">
-                <Link href="/" className="navbar-item text-3xl shabnam">
-                    <GiSpiderWeb className="text-4xl text-[#c9c9c9] hover:scale-125" />
+                <Link href="/" className="navbar-item text-3xl">
+                    <GiSpiderWeb className="text-4xl text-black dark:text-gray-900 hover:scale-125" />
                 </Link>
             </div>
         </div>

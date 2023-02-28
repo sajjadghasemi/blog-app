@@ -40,6 +40,7 @@ const HomePage: FC<BlogsTypes> = (props) => {
                 <link rel="shortcut icon" href="/favicon.png" />
                 <meta name="description" content="Blog web application" />
             </Head>
+
             <Home blogs={props.blogs} />
         </>
     );

@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./userSlice";
+import themeSlice from "./themeSlice";
 import { createWrapper } from "next-redux-wrapper";
 
 export const store = configureStore({
-    reducer: { userSlice },
+    reducer: { userSlice, themeSlice },
 });
 
 const makeStore = () => store;
