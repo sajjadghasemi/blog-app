@@ -10,8 +10,10 @@ import { Cookies } from "react-cookie";
 import { logout } from "@/store/userSlice";
 import { toast } from "react-toastify";
 import { toggleTheme } from "@/store/themeSlice";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
+    const route = useRouter();
     const cookie = new Cookies();
     const dispatch = useDispatch();
 
@@ -95,7 +97,7 @@ const Navbar = () => {
                     />
                 </span>
             </div>
-            <div className="navbar-center">
+            <div className="navbar-center overflow-hidden">
                 <Link
                     href="/"
                     className="navbar-item text-black dark:text-gray-900"
@@ -105,7 +107,7 @@ const Navbar = () => {
                 {currentUser ? (
                     <Link
                         href="/add-blog"
-                        className="navbar-item shabnam text-black dark:text-gray-900"
+                        className="navbar-item text-black dark:text-gray-900"
                     >
                         <FiPlusSquare className="text-3xl" />
                     </Link>
@@ -116,6 +118,29 @@ const Navbar = () => {
                 >
                     <TbEdit className="text-3xl" />
                 </Link>
+                {currentUser ? (
+                    <div
+                        className={`h-[.25rem] w-[.25rem] bg-gray-1100 p-1 rounded-full mt-10 ${
+                            route.pathname === "/"
+                                ? "transition-all duration-300 ease-out visible translate-x-[151px]"
+                                : route.pathname === "/add-blog"
+                                ? "duration-300 translate-x-[92px]"
+                                : route.pathname === "/people"
+                                ? "transition-all duration-300 ease-out visible translate-x-[33px]"
+                                : "hidden"
+                        }`}
+                    ></div>
+                ) : (
+                    <div
+                        className={`h-[.25rem] w-[.25rem] bg-gray-1100 p-1 rounded-full mt-10 ${
+                            route.pathname === "/"
+                                ? "transition-all duration-300 ease-out visible translate-x-[93px]"
+                                : route.pathname === "/people"
+                                ? "transition-all duration-300 ease-out visible translate-x-[33px]"
+                                : "hidden"
+                        }`}
+                    ></div>
+                )}
             </div>
             <div className="navbar-end">
                 <Link href="/" className="navbar-item text-3xl">
