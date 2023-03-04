@@ -18,6 +18,7 @@ import {
     QueryClientProvider,
 } from "@tanstack/react-query";
 import NextNProgress from "nextjs-progressbar";
+import Head from "next/head";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -89,6 +90,11 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                         pauseOnHover
                         theme="dark"
                     />
+                    <Head>
+                        <link rel="manifest" href="/manifest.json" />
+                        <link rel="shortcut icon" href="/favicon.png" />
+                        <meta name="theme-color" content="#fff" />
+                    </Head>
                     <Component {...pageProps} />
                 </Provider>
             </Hydrate>
