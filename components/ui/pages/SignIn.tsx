@@ -34,6 +34,7 @@ const SignIn = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [users, setUsers] = useState<UsersType[] | null>(null);
     const [usernameInput, setUsernameInput] = useState<string>("");
+    const [btnLoading, setBtnLoading] = useState<boolean>(false);
     const cookie = new Cookies();
     const route = useRouter();
 
@@ -100,6 +101,7 @@ const SignIn = () => {
     } = useForm<InputsInTypes>();
 
     const signUp: SubmitHandler<InputsTypes> = async (data) => {
+        setBtnLoading(true);
         await axios
             .post(`http://localhost:4000/user/signup`, {
                 username: data.usernameUp,
@@ -113,16 +115,20 @@ const SignIn = () => {
                 }
             })
             .catch(function (error) {
-                if (
+                if (error) {
+                    toast.error("مشکل ارتباط با سرور، دوباره تلاش کنید.");
+                } else if (
                     error.response.data.msg ===
                     "this username already exists in the database"
                 ) {
                     setAlreadyExists(!alreadyExists);
                 }
             });
+        setBtnLoading(false);
     };
 
     const signIn: SubmitHandler<InputsInTypes> = async (data) => {
+        setBtnLoading(true);
         await axios
             .post(`http://localhost:4000/user/login`, {
                 username: data.usernameIn,
@@ -136,13 +142,16 @@ const SignIn = () => {
                 }
             })
             .catch(function (error) {
-                if (
+                if (error) {
+                    toast.error("مشکل ارتباط با سرور، دوباره تلاش کنید.");
+                } else if (
                     error.response.data.msg ===
                     "bad request: no such user exists"
                 ) {
                     setNoUser(true);
                 }
             });
+        setBtnLoading(false);
     };
 
     return (
@@ -217,6 +226,7 @@ const SignIn = () => {
                         <div className="form-group">
                             <div className="form-field relative">
                                 <input
+                                    key={1}
                                     {...register("usernameUp", {
                                         required: true,
                                         minLength: 1,
@@ -261,6 +271,7 @@ const SignIn = () => {
                             <div className="form-field">
                                 <div className="form-field">
                                     <input
+                                        key={2}
                                         {...register("nameUp", {
                                             required: true,
                                             minLength: 1,
@@ -283,9 +294,15 @@ const SignIn = () => {
                                 <div className="form-control justify-between">
                                     <button
                                         type="submit"
-                                        className="btn bg-gray-700 w-full shabnam"
+                                        className="btn bg-gray-700 w-full"
                                     >
-                                        ثبت نام
+                                        {!btnLoading ? (
+                                            <span className="shabnam">
+                                                ثبت نام
+                                            </span>
+                                        ) : (
+                                            <span className="btn btn-loading bg-transparent"></span>
+                                        )}
                                     </button>
                                 </div>
                             </div>
@@ -372,6 +389,7 @@ const SignIn = () => {
                         <div className="form-group">
                             <div className="form-field">
                                 <input
+                                    key={3}
                                     {...register1("usernameIn", {
                                         required: true,
                                         minLength: 1,
@@ -400,6 +418,7 @@ const SignIn = () => {
                             <div className="form-field">
                                 <div className="form-field">
                                     <input
+                                        key={4}
                                         {...register1("passwordIn", {
                                             required: true,
                                         })}
@@ -420,9 +439,15 @@ const SignIn = () => {
                                 <div className="form-control justify-between">
                                     <button
                                         type="submit"
-                                        className="btn bg-gray-700 w-full shabnam"
+                                        className="btn bg-gray-700 w-full"
                                     >
-                                        ورود
+                                        {!btnLoading ? (
+                                            <span className="shabnam">
+                                                ورود
+                                            </span>
+                                        ) : (
+                                            <span className="btn btn-loading bg-transparent"></span>
+                                        )}
                                     </button>
                                 </div>
                             </div>
